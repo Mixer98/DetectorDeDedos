@@ -36,6 +36,6 @@ while True:
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
-# 10. Liberar recursos al salir
+# 10. Liberar recursos al salirr
 cap.release()
 cv2.destroyAllWindows()
