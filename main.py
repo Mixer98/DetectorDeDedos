@@ -1,5 +1,3 @@
-
-
 import cv2
 from cvzone.HandTrackingModule import HandDetector
 
@@ -7,7 +5,7 @@ from cvzone.HandTrackingModule import HandDetector
 cap = cv2.VideoCapture(0)
 
 # 2. Creamos el detector de manos
-detector = HandDetector(detectionCon=0.6, maxHands=1)
+detector = HandDetector(detectionCon=0.6, maxHands=2)
 
 # 3. Bucle infinito para leer frames de la cámara y procesarlos
 while True:
@@ -22,9 +20,10 @@ while True:
 
     # 6. Si se detecta al menos una mano, contamos dedos
     if hands:
-        hand = hands[0]
-        fingers = detector.fingersUp(hand)
-        totalFingers = fingers.count(1)
+        totalFingers = 0
+        for hand in hands:
+            fingers = detector.fingersUp(hand)
+            totalFingers += fingers.count(1)
 
         # 7. Mostramos el número de dedos levantados en la imagen
         cv2.putText(img, f'Dedos: {totalFingers}', (10, 70),
