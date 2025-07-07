@@ -32,8 +32,8 @@ while True:
     # 8. Mostramos la imagen con la detección
     cv2.imshow("DetectorDeDedos", img)
 
-    # 9. Salir si se presiona la tecla 'q'
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    # Salir si se presiona la tecla 'q' o se cierra la ventana
+    if cv2.waitKey(1) & 0xFF == ord('q') or cv2.getWindowProperty("DetectorDeDedos", cv2.WND_PROP_VISIBLE) < 1:
         break
 
 # 10. Liberar recursos al salirr
