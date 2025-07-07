@@ -1,35 +1,42 @@
-# Importamos la librería OpenCV
-import cv2
 
-# Creamos un objeto llamado 'cap' que accede a la cámara web principal (índice 0)
+
+import cv2
+from cvzone.HandTrackingModule import HandDetector
+
+# 1. Abrimos la cámara
 cap = cv2.VideoCapture(0)
 
-# Verificamos si la cámara se abrió correctamente
-if not cap.isOpened():
-    print("No se pudo abrir la cámara.")
-    exit()  # Salimos del programa si no hay cámara disponible
+# 2. Creamos el detector de manos
+detector = HandDetector(detectionCon=0.6, maxHands=1)
 
-# Iniciamos un bucle infinito para capturar video en tiempo real
+# 3. Bucle infinito para leer frames de la cámara y procesarlos
 while True:
-    # Leemos un fotograma (frame) de la cámara
-    ret, frame = cap.read()
-
-    # Si no se pudo leer el frame, se rompe el bucle
-    if not ret:
-        print("No se pudo capturar el frame.")
+    # 4. Leemos un frame
+    success, img = cap.read()
+    if not success:
+        print("No se pudo capturar la imagen")
         break
 
-    # Mostramos el frame en una ventana llamada "Cámara"
-    cv2.imshow("Cámara", frame)
+    # 5. Detectamos manos en el frame
+    hands, img = detector.findHands(img)
 
-    # Esperamos 1 milisegundo y verificamos si se presionó la tecla 'q'
+    # 6. Si se detecta al menos una mano, contamos dedos
+    if hands:
+        hand = hands[0]
+        fingers = detector.fingersUp(hand)
+        totalFingers = fingers.count(1)
+
+        # 7. Mostramos el número de dedos levantados en la imagen
+        cv2.putText(img, f'Dedos: {totalFingers}', (10, 70),
+                    cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+
+    # 8. Mostramos la imagen con la detección
+    cv2.imshow("DetectorDeDedos", img)
+
+    # 9. Salir si se presiona la tecla 'q'
     if cv2.waitKey(1) & 0xFF == ord('q'):
-        # Si se presiona la tecla 'q', se rompe el bucle
         break
 
-# Cuando se rompe el bucle:
-# 1. Liberamos la cámara
+# 10. Liberar recursos al salir
 cap.release()
-
-# 2. Cerramos todas las ventanas abiertas por OpenCV
 cv2.destroyAllWindows()
