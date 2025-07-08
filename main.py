@@ -27,7 +27,7 @@ while True:
 
         # 7. Mostramos el número de dedos levantados en la imagen
         cv2.putText(img, f'Dedos: {totalFingers}', (10, 70),
-                    cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 3)
 
     # 8. Mostramos la imagen con la detección
     cv2.imshow("DetectorDeDedos", img)
